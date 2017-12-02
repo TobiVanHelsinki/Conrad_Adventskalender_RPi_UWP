@@ -6,36 +6,33 @@ namespace Conrad_RPi
 {
     public sealed partial class MainPage : Page
     {
+        GpioController gpio;
+        GpioPin PinLED1;
+        GpioPin PinLED2;
         public MainPage()
         {
-            this.InitializeComponent();
-            this.Loaded += Page_Loaded;
+            InitializeComponent();
+            ConfigureGPIO();
         }
-
-        #region GPIO Test
-        GpioPin pin;
-        GpioController gpio;
-        private readonly int LEDPIN = 4;
-
-        private void DayAction01(object sender, RoutedEventArgs e)
+        void ConfigureGPIO()
         {
-            pin.Write(LEDSwitch.IsOn ? GpioPinValue.High : GpioPinValue.Low);
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            // load default GpioController
             gpio = GpioController.GetDefault();
-
-            //set the connection to the gpio pin
-            pin = gpio.OpenPin(LEDPIN);
-
-            //set Value for the Pin to High = LED off
-            pin.Write(GpioPinValue.High);
-
-            //config the pin for output
-            pin.SetDriveMode(GpioPinDriveMode.Output);
+            PinLED1 = gpio.OpenPin(4);
+            PinLED2 = gpio.OpenPin(17);
+            PinLED1.Write(GpioPinValue.High);
+            PinLED2.Write(GpioPinValue.High);
+            PinLED1.SetDriveMode(GpioPinDriveMode.Output);
+            PinLED2.SetDriveMode(GpioPinDriveMode.Output);
         }
-        #endregion
+
+        void DayAction01(object sender, RoutedEventArgs e)
+        {
+            PinLED1.Write((sender as ToggleSwitch).IsOn ? GpioPinValue.High : GpioPinValue.Low);
+        }
+
+        void DayAction02(object sender, RoutedEventArgs e)
+        {
+            PinLED2.Write((sender as ToggleSwitch).IsOn ? GpioPinValue.High : GpioPinValue.Low);
+        }
     }
 }

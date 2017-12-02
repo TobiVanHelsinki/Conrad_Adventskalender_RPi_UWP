@@ -7,17 +7,30 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.Resources>
+        <Style x:Key="DayStackPanel" TargetType="StackPanel">
+            <Setter Property="Padding" Value="10"/>
+        </Style>
         <Style x:Key="DayTextBlock" TargetType="TextBlock">
             <Setter Property="FontSize" Value="40"/>
         </Style>
         <Style x:Key="STD_ToggleSwitch" TargetType="ToggleSwitch">
             <Setter Property="FontSize" Value="40"/>
         </Style>
+        <DataTemplate x:Key="Day01">
+            <StackPanel Style="{StaticResource DayStackPanel}">
+                <TextBlock Text="Day 01" Style="{StaticResource DayTextBlock}"/>
+                <ToggleSwitch Toggled="DayAction01" Style="{StaticResource STD_ToggleSwitch}"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="Day02">
+            <StackPanel Style="{StaticResource DayStackPanel}">
+                <TextBlock Text="Day 02" Style="{StaticResource DayTextBlock}"/>
+                <ToggleSwitch Toggled="DayAction02" Style="{StaticResource STD_ToggleSwitch}"/>
+            </StackPanel>
+        </DataTemplate>
     </Page.Resources>
     <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel>
-            <TextBlock Text="Day 01" Style="{StaticResource DayTextBlock}"/>
-            <ToggleSwitch x:Name="LEDSwitch" Toggled="DayAction01" Style="{StaticResource STD_ToggleSwitch}"/>
-        </StackPanel>
+        <ContentControl ContentTemplate="{StaticResource Day01}"/>
+        <ContentControl ContentTemplate="{StaticResource Day02}"/>
     </StackPanel>
 </Page>
