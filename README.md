@@ -1,0 +1,2 @@
+# Conrad_Adventskalender_RPi_UWP
+Ich habe den Conrad Adventskalender Raspbery Pi geschenkt bekommen. In dem gibt es für jeden Tag ein Experiment mit dem Pi. Ein nettes Geschenk, jedoch ist das gute Stück eher für Kinder der MIttelstufe gedacht. Naja was soll's, dann mache ich es mir halt etwas schwerer: Anstatt die Klicki-Bunti Linux IDE zu nehmen habe ich meinen Pi (Model 2B) mit Windows IOT bespielt und werde in diesem Repo den Source Code für die Experimente, die ich nun mit einer Universal WIndows APP durchführe, speichern.
