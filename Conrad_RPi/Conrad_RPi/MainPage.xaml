@@ -7,6 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.Resources>
+        <local:io_GpioPinValue x:Key="io_GpioPinValue"/>
+
         <Style x:Key="DayStackPanel" TargetType="StackPanel">
             <Setter Property="Padding" Value="10"/>
         </Style>
@@ -37,9 +39,9 @@
         <StackPanel>
             <TextBlock Text="generell stuff" Style="{StaticResource DayTextBlock}"/>
             <TextBlock Text="RED LED" Style="{StaticResource DayTextBlock}"/>
-            <ToggleSwitch IsOn="{x:Bind PinLED1.BoolStatus, Mode=TwoWay}" Style="{StaticResource STD_ToggleSwitch}"/>
+            <ToggleSwitch IsOn="{x:Bind PinLED1.Status, Converter={StaticResource io_GpioPinValue}, Mode=TwoWay}" Style="{StaticResource STD_ToggleSwitch}"/>
             <TextBlock Text="GREEN LED" Style="{StaticResource DayTextBlock}"/>
-            <ToggleSwitch IsOn="{x:Bind PinLED2.BoolStatus, Mode=TwoWay}" Style="{StaticResource STD_ToggleSwitch}"/>
+            <ToggleSwitch IsOn="{x:Bind PinLED2.Status, Converter={StaticResource io_GpioPinValue}, Mode=TwoWay}" Style="{StaticResource STD_ToggleSwitch}"/>
         </StackPanel>
     </StackPanel>
 </Page>

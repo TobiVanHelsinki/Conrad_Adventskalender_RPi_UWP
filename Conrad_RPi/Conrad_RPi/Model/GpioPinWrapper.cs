@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Devices.Gpio;
+using Windows.Foundation;
 
 namespace Conrad_RPi.Model
 {
@@ -16,7 +13,36 @@ namespace Conrad_RPi.Model
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public GpioPin Pin;
+        GpioPin _Pin;
+        public GpioPin Pin
+        {
+            get
+            {
+                return _Pin;
+            }
+            set
+            {
+                if (_Pin != value)
+                {
+                    _Pin = value;
+                    NotifyPropertyChanged();
+                    _Pin.ValueChanged += _Pin_ValueChanged;
+                }
+            }
+        }
+
+        //
+        // Zusammenfassung:
+        //     Tritt auf, wenn der Wert des allgemeinen E/A (GPIO)-Pins geändert wird, entweder
+        //     aufgrund eines externen Auslöseimpulses, wenn der Pin als Eingabe konfiguriert
+        //     ist, oder wenn ein Wert auf den Pin geschrieben wird, wenn der Pin als Ausgabe
+        //     konfiguriert ist.
+        public event TypedEventHandler<GpioPin, GpioPinValueChangedEventArgs> ValueChanged;
+        private void _Pin_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs args)
+        {
+            ValueChanged?.Invoke(sender, args);
+        }
+
         public GpioPinValue Status
         {
             get
@@ -29,19 +55,24 @@ namespace Conrad_RPi.Model
                 NotifyPropertyChanged();
             }
         }
-        public bool BoolStatus
+
+        public GpioPinDriveMode DriveMode
         {
             get
             {
-                return Pin.Read() == GpioPinValue.High ? true : false;
+                return Pin.GetDriveMode();
             }
             set
             {
-                Pin.Write(value == true ? GpioPinValue.High : GpioPinValue.Low);
+                Pin.SetDriveMode(value);
                 NotifyPropertyChanged();
             }
         }
-        
 
+        public GpioSharingMode SharingMode => Pin.SharingMode;
+        public int PinNumber => Pin.PinNumber;
+        public TimeSpan DebounceTimeout => Pin.DebounceTimeout;
+        public void Dispose() => Pin.Dispose();
+        public bool IsDriveModeSupported(GpioPinDriveMode m) => Pin.IsDriveModeSupported(m);
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Windows.Devices.Gpio;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 
 namespace Conrad_RPi
 {
@@ -21,12 +22,12 @@ namespace Conrad_RPi
         void ConfigureGPIO()
         {
             gpio = GpioController.GetDefault();
-            PinLED1.Pin = gpio.OpenPin(4);
-            PinLED2.Pin = gpio.OpenPin(17);
+            PinLED1.Pin = gpio?.OpenPin(4);
+            PinLED2.Pin = gpio?.OpenPin(17);
             PinLED1.Status = GpioPinValue.Low;
             PinLED2.Status = GpioPinValue.Low;
-            PinLED1.Pin.SetDriveMode(GpioPinDriveMode.Output);
-            PinLED2.Pin.SetDriveMode(GpioPinDriveMode.Output);
+            PinLED1.Pin?.SetDriveMode(GpioPinDriveMode.Output);
+            PinLED2.Pin?.SetDriveMode(GpioPinDriveMode.Output);
         }
 
         void DayAction01(object sender, RoutedEventArgs e)
@@ -39,9 +40,9 @@ namespace Conrad_RPi
             if ((sender as ToggleSwitch).IsOn)
             {
                 source = new CancellationTokenSource();
-                await Task.Run(() => Blink(PinLED1.Pin, 1, source.Token), source.Token);
+                await Task.Run(() => Blink(PinLED1, 1, source.Token), source.Token);
                 await Task.Delay(TimeSpan.FromSeconds(0.5));
-                await Task.Run(() => Blink(PinLED2.Pin, 1, source.Token), source.Token);
+                await Task.Run(() => Blink(PinLED2, 1, source.Token), source.Token);
             }
             else
             {
@@ -49,15 +50,28 @@ namespace Conrad_RPi
             }
         }
 
-        static async void Blink(GpioPin Pin, int WaitTime, CancellationToken cancellationToken)
+        static async void Blink(GpioPinWrapper Pin, int WaitTime, CancellationToken cancellationToken)
         {
             bool CurrentValue = false;
             while (!cancellationToken.IsCancellationRequested)
             {
-                Pin.Write(CurrentValue ? GpioPinValue.High : GpioPinValue.Low);
+                Pin.Status = CurrentValue ? GpioPinValue.High : GpioPinValue.Low;
                 CurrentValue = !CurrentValue;
                 await Task.Delay(TimeSpan.FromSeconds(WaitTime));
             }
         }
+    }
+    public class io_GpioPinValue : IValueConverter
+    {
+        #region IValueConverter Members 
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return ((GpioPinValue)value) == GpioPinValue.High ? true : false;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return (bool)value ? GpioPinValue.High : GpioPinValue.Low;
+        }
+        #endregion
     }
 }
