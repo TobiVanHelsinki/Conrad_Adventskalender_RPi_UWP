@@ -11,8 +11,8 @@ namespace Conrad_RPi
     public sealed partial class MainPage : Page
     {
         GpioController gpio;
-        GpioPinWrapper PinLED1;
-        GpioPinWrapper PinLED2;
+        GpioPinWrapper PinLED1 = new GpioPinWrapper();
+        GpioPinWrapper PinLED2 = new GpioPinWrapper();
         public MainPage()
         {
             InitializeComponent();
@@ -23,8 +23,8 @@ namespace Conrad_RPi
             gpio = GpioController.GetDefault();
             PinLED1.Pin = gpio.OpenPin(4);
             PinLED2.Pin = gpio.OpenPin(17);
-            PinLED1.Pin.Write(GpioPinValue.Low);
-            PinLED2.Pin.Write(GpioPinValue.Low);
+            PinLED1.Status = GpioPinValue.Low;
+            PinLED2.Status = GpioPinValue.Low;
             PinLED1.Pin.SetDriveMode(GpioPinDriveMode.Output);
             PinLED2.Pin.SetDriveMode(GpioPinDriveMode.Output);
         }
