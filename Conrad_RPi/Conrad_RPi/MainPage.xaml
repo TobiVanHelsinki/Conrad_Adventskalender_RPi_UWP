@@ -29,8 +29,17 @@
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
-    <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <ContentControl ContentTemplate="{StaticResource Day01}"/>
-        <ContentControl ContentTemplate="{StaticResource Day02}"/>
+    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <StackPanel>
+            <ContentControl ContentTemplate="{StaticResource Day01}"/>
+            <ContentControl ContentTemplate="{StaticResource Day02}"/>
+        </StackPanel>
+        <StackPanel>
+            <TextBlock Text="generell stuff" Style="{StaticResource DayTextBlock}"/>
+            <TextBlock Text="RED LED" Style="{StaticResource DayTextBlock}"/>
+            <ToggleSwitch IsOn="{x:Bind PinLED1.BoolStatus, Mode=TwoWay}" Style="{StaticResource STD_ToggleSwitch}"/>
+            <TextBlock Text="GREEN LED" Style="{StaticResource DayTextBlock}"/>
+            <ToggleSwitch IsOn="{x:Bind PinLED2.BoolStatus, Mode=TwoWay}" Style="{StaticResource STD_ToggleSwitch}"/>
+        </StackPanel>
     </StackPanel>
 </Page>

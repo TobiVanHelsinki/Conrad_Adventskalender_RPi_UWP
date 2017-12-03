@@ -1,4 +1,8 @@
-﻿using Windows.Devices.Gpio;
+﻿using Conrad_RPi.Model;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Windows.Devices.Gpio;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -7,8 +11,8 @@ namespace Conrad_RPi
     public sealed partial class MainPage : Page
     {
         GpioController gpio;
-        GpioPin PinLED1;
-        GpioPin PinLED2;
+        GpioPinWrapper PinLED1;
+        GpioPinWrapper PinLED2;
         public MainPage()
         {
             InitializeComponent();
@@ -17,22 +21,43 @@ namespace Conrad_RPi
         void ConfigureGPIO()
         {
             gpio = GpioController.GetDefault();
-            PinLED1 = gpio.OpenPin(4);
-            PinLED2 = gpio.OpenPin(17);
-            PinLED1.Write(GpioPinValue.High);
-            PinLED2.Write(GpioPinValue.High);
-            PinLED1.SetDriveMode(GpioPinDriveMode.Output);
-            PinLED2.SetDriveMode(GpioPinDriveMode.Output);
+            PinLED1.Pin = gpio.OpenPin(4);
+            PinLED2.Pin = gpio.OpenPin(17);
+            PinLED1.Pin.Write(GpioPinValue.Low);
+            PinLED2.Pin.Write(GpioPinValue.Low);
+            PinLED1.Pin.SetDriveMode(GpioPinDriveMode.Output);
+            PinLED2.Pin.SetDriveMode(GpioPinDriveMode.Output);
         }
 
         void DayAction01(object sender, RoutedEventArgs e)
         {
-            PinLED1.Write((sender as ToggleSwitch).IsOn ? GpioPinValue.High : GpioPinValue.Low);
+            //PinLED1.Pin.Write((sender as ToggleSwitch).IsOn ? GpioPinValue.High : GpioPinValue.Low);
+        }
+        CancellationTokenSource source;
+        async void DayAction02(object sender, RoutedEventArgs e)
+        {
+            if ((sender as ToggleSwitch).IsOn)
+            {
+                source = new CancellationTokenSource();
+                await Task.Run(() => Blink(PinLED1.Pin, 1, source.Token), source.Token);
+                await Task.Delay(TimeSpan.FromSeconds(0.5));
+                await Task.Run(() => Blink(PinLED2.Pin, 1, source.Token), source.Token);
+            }
+            else
+            {
+                source.Cancel();
+            }
         }
 
-        void DayAction02(object sender, RoutedEventArgs e)
+        static async void Blink(GpioPin Pin, int WaitTime, CancellationToken cancellationToken)
         {
-            PinLED2.Write((sender as ToggleSwitch).IsOn ? GpioPinValue.High : GpioPinValue.Low);
+            bool CurrentValue = false;
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                Pin.Write(CurrentValue ? GpioPinValue.High : GpioPinValue.Low);
+                CurrentValue = !CurrentValue;
+                await Task.Delay(TimeSpan.FromSeconds(WaitTime));
+            }
         }
     }
 }
