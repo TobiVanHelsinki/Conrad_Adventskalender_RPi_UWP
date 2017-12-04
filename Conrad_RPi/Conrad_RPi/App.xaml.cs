@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TLIB.Model;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -30,6 +31,14 @@ namespace Conrad_RPi
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            UnhandledException += App_UnhandledException;
+        }
+
+        private void App_UnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine(e.Exception);
+            System.Diagnostics.Debug.WriteLine(e.Exception.Source);
+            System.Diagnostics.Debug.WriteLine(e.Message);
         }
 
         /// <summary>

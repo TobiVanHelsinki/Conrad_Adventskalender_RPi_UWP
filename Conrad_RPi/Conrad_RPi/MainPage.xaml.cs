@@ -2,10 +2,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using TLIB.Model;
 using Windows.Devices.Gpio;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Navigation;
 
 namespace Conrad_RPi
 {
@@ -14,25 +16,40 @@ namespace Conrad_RPi
         GpioController gpio;
         GpioPinWrapper PinLED1 = new GpioPinWrapper();
         GpioPinWrapper PinLED2 = new GpioPinWrapper();
+        GpioPinWrapper PinTaster1 = new GpioPinWrapper();
         public MainPage()
         {
             InitializeComponent();
             ConfigureGPIO();
+        }
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            SharedAppModel.Instance.SetDependencies(Dispatcher);
+            base.OnNavigatedTo(e);
         }
         void ConfigureGPIO()
         {
             gpio = GpioController.GetDefault();
             PinLED1.Pin = gpio?.OpenPin(4);
             PinLED2.Pin = gpio?.OpenPin(17);
+            PinTaster1.Pin = gpio?.OpenPin(00000);
             PinLED1.Status = GpioPinValue.Low;
             PinLED2.Status = GpioPinValue.Low;
             PinLED1.Pin?.SetDriveMode(GpioPinDriveMode.Output);
             PinLED2.Pin?.SetDriveMode(GpioPinDriveMode.Output);
+            PinTaster1.Pin?.SetDriveMode(GpioPinDriveMode.Input);
+            PinTaster1.Pin.ValueChanged += Pin3_ValueChanged;
+        }
+
+        private void Pin3_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs args)
+        {
+            System.Diagnostics.Debug.WriteLine(args.Edge);
+            PinTaster1.Status = sender.Read();
         }
 
         void DayAction01(object sender, RoutedEventArgs e)
         {
-            //PinLED1.Pin.Write((sender as ToggleSwitch).IsOn ? GpioPinValue.High : GpioPinValue.Low);
+            PinLED1.Status = (sender as ToggleSwitch).IsOn ? GpioPinValue.High : GpioPinValue.Low;
         }
         CancellationTokenSource source;
         async void DayAction02(object sender, RoutedEventArgs e)

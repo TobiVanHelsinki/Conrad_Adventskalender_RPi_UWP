@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using TLIB.Model;
 using Windows.Devices.Gpio;
 using Windows.Foundation;
 
@@ -11,7 +12,8 @@ namespace Conrad_RPi.Model
         public event PropertyChangedEventHandler PropertyChanged;
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            ModelHelper.CallPropertyChangedAtDispatcher(PropertyChanged,this, propertyName, Windows.UI.Core.CoreDispatcherPriority.High);
+            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         GpioPin _Pin;
         public GpioPin Pin
@@ -24,9 +26,16 @@ namespace Conrad_RPi.Model
             {
                 if (_Pin != value)
                 {
-                    _Pin = value;
                     NotifyPropertyChanged();
-                    _Pin.ValueChanged += _Pin_ValueChanged;
+                    if (_Pin != null)
+                    {
+                        _Pin.ValueChanged -= _Pin_ValueChanged;
+                    }
+                    _Pin = value;
+                    if (_Pin != null)
+                    {
+                        _Pin.ValueChanged += _Pin_ValueChanged;
+                    }
                 }
             }
         }

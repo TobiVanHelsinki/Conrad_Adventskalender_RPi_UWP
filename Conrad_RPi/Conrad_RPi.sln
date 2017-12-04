@@ -5,7 +5,13 @@ VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conrad_RPi", "Conrad_RPi\Conrad_RPi.csproj", "{77618B0F-D5E6-4CB0-9912-83C1464D814B}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TLIB", "..\..\repos\TLIB\TLIB\TLIB.shproj", "{C43E2365-5678-4E72-A123-71383DE9B2DC}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\repos\TLIB\TLIB\TLIB.projitems*{77618b0f-d5e6-4cb0-9912-83c1464d814b}*SharedItemsImports = 4
+		..\..\repos\TLIB\TLIB\TLIB.projitems*{c43e2365-5678-4e72-a123-71383de9b2dc}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
 		Debug|x64 = Debug|x64
