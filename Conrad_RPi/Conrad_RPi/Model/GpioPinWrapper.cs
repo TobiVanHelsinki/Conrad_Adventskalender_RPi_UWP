@@ -13,7 +13,6 @@ namespace Conrad_RPi.Model
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             ModelHelper.CallPropertyChangedAtDispatcher(PropertyChanged,this, propertyName, Windows.UI.Core.CoreDispatcherPriority.High);
-            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         GpioPin _Pin;
         public GpioPin Pin

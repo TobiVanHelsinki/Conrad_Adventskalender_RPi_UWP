@@ -34,21 +34,21 @@ namespace Conrad_RPi
             {
                 return;
             }
-            PinLED1.Pin = gpio.OpenPin(4);
-            PinLED2.Pin = gpio.OpenPin(17);
-            PinTaster1.Pin = gpio.OpenPin(00000);
+            PinLED1.Pin = gpio.OpenPin(4, GpioSharingMode.Exclusive);
+            PinLED2.Pin = gpio.OpenPin(17, GpioSharingMode.Exclusive);
+            PinTaster1.Pin = gpio.OpenPin(7, GpioSharingMode.Exclusive);
             PinLED1.Status = GpioPinValue.Low;
             PinLED2.Status = GpioPinValue.Low;
             PinLED1.Pin.SetDriveMode(GpioPinDriveMode.Output);
             PinLED2.Pin.SetDriveMode(GpioPinDriveMode.Output);
-            PinTaster1.Pin.SetDriveMode(GpioPinDriveMode.Input);
-            PinTaster1.Pin.ValueChanged += Pin3_ValueChanged;
+            PinTaster1.Pin.SetDriveMode(GpioPinDriveMode.InputPullDown);
+            PinTaster1.Pin.ValueChanged += DayAction03;
         }
 
-        private void Pin3_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs args)
+        private void DayAction03(GpioPin sender, GpioPinValueChangedEventArgs args)
         {
-            System.Diagnostics.Debug.WriteLine(args.Edge);
-            PinTaster1.Status = sender.Read();
+            //System.Diagnostics.Debug.WriteLine(args.Edge);
+            PinLED2.Status = args.Edge == GpioPinEdge.FallingEdge ? GpioPinValue.Low : GpioPinValue.High;
         }
 
         void DayAction01(object sender, RoutedEventArgs e)
