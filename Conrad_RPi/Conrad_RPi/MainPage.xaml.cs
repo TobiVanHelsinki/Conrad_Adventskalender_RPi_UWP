@@ -30,14 +30,18 @@ namespace Conrad_RPi
         void ConfigureGPIO()
         {
             gpio = GpioController.GetDefault();
-            PinLED1.Pin = gpio?.OpenPin(4);
-            PinLED2.Pin = gpio?.OpenPin(17);
-            PinTaster1.Pin = gpio?.OpenPin(00000);
+            if (gpio == null)
+            {
+                return;
+            }
+            PinLED1.Pin = gpio.OpenPin(4);
+            PinLED2.Pin = gpio.OpenPin(17);
+            PinTaster1.Pin = gpio.OpenPin(00000);
             PinLED1.Status = GpioPinValue.Low;
             PinLED2.Status = GpioPinValue.Low;
-            PinLED1.Pin?.SetDriveMode(GpioPinDriveMode.Output);
-            PinLED2.Pin?.SetDriveMode(GpioPinDriveMode.Output);
-            PinTaster1.Pin?.SetDriveMode(GpioPinDriveMode.Input);
+            PinLED1.Pin.SetDriveMode(GpioPinDriveMode.Output);
+            PinLED2.Pin.SetDriveMode(GpioPinDriveMode.Output);
+            PinTaster1.Pin.SetDriveMode(GpioPinDriveMode.Input);
             PinTaster1.Pin.ValueChanged += Pin3_ValueChanged;
         }
 

@@ -51,16 +51,23 @@ namespace Conrad_RPi.Model
         {
             ValueChanged?.Invoke(sender, args);
         }
-
+        GpioPinValue FakeStatus;
         public GpioPinValue Status
         {
             get
             {
-                return Pin.Read();
+                return Pin == null ? FakeStatus : Pin.Read();
             }
             set
             {
-                Pin.Write(value);
+                if (Pin == null)
+                {
+                    FakeStatus = value;
+                }
+                else
+                {
+                    Pin.Write(value);
+                }
                 NotifyPropertyChanged();
             }
         }
