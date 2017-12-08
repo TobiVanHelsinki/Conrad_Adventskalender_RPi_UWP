@@ -15,19 +15,59 @@
         <Style x:Key="DayTextBlock" TargetType="TextBlock">
             <Setter Property="FontSize" Value="40"/>
         </Style>
+        <Style x:Key="DayTextBlockSmall" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="25"/>
+        </Style>
         <Style x:Key="STD_ToggleSwitch" TargetType="ToggleSwitch">
             <Setter Property="FontSize" Value="40"/>
         </Style>
+        
         <DataTemplate x:Key="Day01">
             <StackPanel Style="{StaticResource DayStackPanel}">
                 <TextBlock Text="Day 01" Style="{StaticResource DayTextBlock}"/>
                 <ToggleSwitch Toggled="DayAction01" Style="{StaticResource STD_ToggleSwitch}"/>
+                <TextBlock Text="activate red" Style="{StaticResource DayTextBlockSmall}"/>
             </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="Day02">
             <StackPanel Style="{StaticResource DayStackPanel}">
-                <TextBlock Text="Day 02" Style="{StaticResource DayTextBlock}"/>
+                <TextBlock Text="Day 02 and 03" Style="{StaticResource DayTextBlock}"/>
                 <ToggleSwitch Toggled="DayAction02" Style="{StaticResource STD_ToggleSwitch}"/>
+                <TextBlock Text="A simple Program" Style="{StaticResource DayTextBlockSmall}"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="Day04">
+            <StackPanel Style="{StaticResource DayStackPanel}">
+                <TextBlock Text="Day 04" Style="{StaticResource DayTextBlock}"/>
+                <ToggleSwitch Toggled="DayAction04" Style="{StaticResource STD_ToggleSwitch}"/>
+                <TextBlock Text="HW-Button to activate LED" Style="{StaticResource DayTextBlockSmall}"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="Day05">
+            <StackPanel Style="{StaticResource DayStackPanel}">
+                <TextBlock Text="Day 05" Style="{StaticResource DayTextBlock}"/>
+                <ToggleSwitch Toggled="DayAction05" Style="{StaticResource STD_ToggleSwitch}"/>
+                <TextBlock Text="Pyramide and HW-Button to switch LED" Style="{StaticResource DayTextBlockSmall}"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="Day06">
+            <StackPanel Style="{StaticResource DayStackPanel}">
+                <TextBlock Text="Day 06" Style="{StaticResource DayTextBlock}"/>
+                <TextBlock Text="Just a GUI Animation with 3 LEDs" Style="{StaticResource DayTextBlockSmall}"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="Day07">
+            <StackPanel Style="{StaticResource DayStackPanel}">
+                <TextBlock Text="Day 07" Style="{StaticResource DayTextBlock}"/>
+                <TextBlock Text="Webserver Implementation" Style="{StaticResource DayTextBlockSmall}"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="Day08">
+            <StackPanel Style="{StaticResource DayStackPanel}">
+                <TextBlock Text="Day 08" Style="{StaticResource DayTextBlock}"/>
+                <ToggleSwitch Toggled="DayAction08" Style="{StaticResource STD_ToggleSwitch}"/>
+                <TextBlock Text="Yellow LED PWM (0-10)" Style="{StaticResource DayTextBlockSmall}"/>
+                <TextBox Text="5" Name="Day08Input"/>
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
@@ -40,22 +80,31 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel>
-            <ContentControl ContentTemplate="{StaticResource Day01}"/>
-            <ContentControl ContentTemplate="{StaticResource Day02}"/>
-        </StackPanel>
+        <ScrollContentPresenter>
+            <StackPanel>
+                <ContentControl ContentTemplate="{StaticResource Day01}"/>
+                <ContentControl ContentTemplate="{StaticResource Day02}"/>
+                <ContentControl ContentTemplate="{StaticResource Day04}"/>
+                <ContentControl ContentTemplate="{StaticResource Day05}"/>
+                <ContentControl ContentTemplate="{StaticResource Day06}"/>
+                <ContentControl ContentTemplate="{StaticResource Day07}"/>
+                <ContentControl ContentTemplate="{StaticResource Day08}"/>
+            </StackPanel>
+        </ScrollContentPresenter>
         <StackPanel Grid.Column="1">
             <TextBlock Text="generell stuff" Style="{StaticResource DayTextBlock}"/>
             <TextBlock Text="RED LED" Style="{StaticResource DayTextBlock}"/>
             <ToggleSwitch IsOn="{x:Bind PinLED1.Status, Converter={StaticResource io_GpioPinValue}, Mode=TwoWay}" Style="{StaticResource STD_ToggleSwitch}"/>
             <TextBlock Text="GREEN LED" Style="{StaticResource DayTextBlock}"/>
             <ToggleSwitch IsOn="{x:Bind PinLED2.Status, Converter={StaticResource io_GpioPinValue}, Mode=TwoWay}" Style="{StaticResource STD_ToggleSwitch}"/>
+            <TextBlock Text="YELLOW LED" Style="{StaticResource DayTextBlock}"/>
+            <ToggleSwitch IsOn="{x:Bind PinLED3.Status, Converter={StaticResource io_GpioPinValue}, Mode=TwoWay}" Style="{StaticResource STD_ToggleSwitch}"/>
         </StackPanel>
-        <TextBlock Grid.ColumnSpan="2">
-            To Use the webserver enter: "http:\\[IP]?command"
-            Commands are: on or off with on of the led names: red, green, white 
-            for example: "http:\\[IP]?redon"
-            for example: "http:\\[IP]?greenoff"
+        <TextBlock Grid.ColumnSpan="2" Grid.Row="1">
+            <Run Text="To Use the webserver enter: http:\\[IP]?command\"/>
+            <Run Text="Commands are: on or off with on of the led names: red, green, white"/>
+            <Run Text="for example: http:\\[IP]?redon"/>
+            <Run Text="for example: http:\\[IP]?greenoff"/>
         </TextBlock>
     </Grid>
 </Page>
