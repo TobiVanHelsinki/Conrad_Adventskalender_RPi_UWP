@@ -1,4 +1,5 @@
 ﻿using Conrad_RPi.Model;
+using Conrad_RPi.Server;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,8 +22,49 @@ namespace Conrad_RPi
         {
             InitializeComponent();
             ConfigureGPIO();
+            server = new LEDHTTPServer();
+            server.NewQueryAppeared += Server_NewQueryAppeared;
+            server.Initialise();
         }
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+
+        private void Server_NewQueryAppeared(object sender, string e)
+        {
+            if (e == null || e == "")
+            {
+                return;
+            }
+            string message = e.ToLower();
+            GpioPinValue newValue = GpioPinValue.High;
+            GpioPinWrapper LED = null;
+            if (message.Contains("on"))
+            {
+                newValue = GpioPinValue.High;
+            }
+            else if (message.Contains("off"))
+            {
+                newValue = GpioPinValue.Low;
+            }
+            if (message.Contains("red"))
+            {
+                LED = PinLED1;
+            }
+            else if (message.Contains("green"))
+            {
+                LED = PinLED2;
+            }
+            else if (message.Contains("white"))
+            {
+                return;
+            }
+            else if (message.Contains("white"))
+            {
+                return;
+            }
+            LED.Status = newValue;
+        }
+
+        LEDHTTPServer server;
+    protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             SharedAppModel.Instance.SetDependencies(Dispatcher);
             base.OnNavigatedTo(e);

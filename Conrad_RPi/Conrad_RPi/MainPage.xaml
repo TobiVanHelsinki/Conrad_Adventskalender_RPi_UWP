@@ -31,17 +31,31 @@
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
-    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid HorizontalAlignment="Center" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <StackPanel>
             <ContentControl ContentTemplate="{StaticResource Day01}"/>
             <ContentControl ContentTemplate="{StaticResource Day02}"/>
         </StackPanel>
-        <StackPanel>
+        <StackPanel Grid.Column="1">
             <TextBlock Text="generell stuff" Style="{StaticResource DayTextBlock}"/>
             <TextBlock Text="RED LED" Style="{StaticResource DayTextBlock}"/>
             <ToggleSwitch IsOn="{x:Bind PinLED1.Status, Converter={StaticResource io_GpioPinValue}, Mode=TwoWay}" Style="{StaticResource STD_ToggleSwitch}"/>
             <TextBlock Text="GREEN LED" Style="{StaticResource DayTextBlock}"/>
             <ToggleSwitch IsOn="{x:Bind PinLED2.Status, Converter={StaticResource io_GpioPinValue}, Mode=TwoWay}" Style="{StaticResource STD_ToggleSwitch}"/>
         </StackPanel>
-    </StackPanel>
+        <TextBlock Grid.ColumnSpan="2">
+            To Use the webserver enter: "http:\\[IP]?command"
+            Commands are: on or off with on of the led names: red, green, white 
+            for example: "http:\\[IP]?redon"
+            for example: "http:\\[IP]?greenoff"
+        </TextBlock>
+    </Grid>
 </Page>
