@@ -179,7 +179,6 @@ namespace Conrad_RPi
             }
         }
         #endregion
-        //CancellationTokenSource source;
         static async void Blink(GpioPinWrapper Pin, int WaitTime, CancellationToken cancellationToken)
         {
             bool CurrentValue = false;
